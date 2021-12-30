@@ -1,0 +1,5 @@
+core/api/cpp_module
+**/build
+**/__pycache__
+.DS_Store
+.vscode

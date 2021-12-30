@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "blackjack"
+version = "1.0.0"
+description = "API for the blackjack service"
+authors = ["lkk7 <lukaszlapinski7@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.70.0"
+pydantic = "^1.8.2"
+starlette = "^0.16.0"
+uvicorn = "^0.15.0"
+python-jose = {version = "^3.3.0", extras = ["cryptography"]}
+python-multipart = "^0.0.5"
+passlib = {version = "^1.7.4", extras = ["bcrypt"]}
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
