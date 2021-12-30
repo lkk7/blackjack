@@ -1,26 +1,15 @@
-from random import randrange
-from fastapi import FastAPI, Path
-from pydantic import BaseModel, Field
-from .redis import RedisWrapper
-import cpp_module.cppcore as cpp
+from fastapi import FastAPI
+from . import redis
+from .routers import game
+
 
 app = FastAPI()
-redis = RedisWrapper()
+app.include_router(game.router)
 
-app.on_event("startup")(redis.create_redis)
-app.on_event("shutdown")(redis.close_redis)
+app.on_event("startup")(redis.wrapper.create_redis)
+app.on_event("shutdown")(redis.wrapper.close_redis)
 
 
-@app.get("/")
+@app.get("/", response_model=bool)
 async def root():
-    return {
-        "message": "Success! Blackjack value: {}".format(cpp.BLACKJACK_VALUE),
-        "redisWorks": await redis.conn.ping(),
-    }
-
-
-@app.get("/testredis")
-async def test_redis():
-    await redis.conn.set("random-value", "randomValue" + str(randrange(100)))
-    test_value = await redis.conn.get("random-value")
-    return {"random-value": test_value}
+    return True

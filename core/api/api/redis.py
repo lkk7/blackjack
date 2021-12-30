@@ -12,3 +12,9 @@ class RedisWrapper:
 
     async def close_redis(self):
         await self.conn.close()
+
+    def get(self):
+        return self.conn
+
+
+wrapper = RedisWrapper()
