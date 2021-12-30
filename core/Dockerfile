@@ -18,7 +18,7 @@ WORKDIR /core
 ENV PYTHONPATH="/core/api" \
     POETRY_VERSION=1.1.11
 RUN DEBIAN_FRONTEND='noninteractive' \
-    apt-get update -y && apt install -y --no-install-recommends \
+    apt-get update -y && apt-get install -y --no-install-recommends \
     cmake \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
