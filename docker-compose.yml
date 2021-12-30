@@ -1,0 +1,22 @@
+networks:
+  blackjack:
+    driver: bridge
+
+services:
+  core:
+    image: blackjack-core
+    build: ./core/
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+    networks:
+      - blackjack
+    volumes:
+      - type: bind
+        source: ./core
+        target: /core
+  redis:
+    image: redis:alpine
+    networks:
+      - blackjack

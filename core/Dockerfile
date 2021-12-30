@@ -1,16 +1,16 @@
 # build:
-# docker build -t blackjack/core .
+# docker build -t blackjack-core .
 
 # run a container with bash:
-# docker run -p 80:8000 -it --name blackjack-core blackjack/core /bin/bash
+# docker run -p 80:8000 -it --name blackjack-core blackjack-core /bin/bash
 
 # run a container with bash for general development 
 # (overwrite everything with the local repo):
-# docker run -p 80:8000 -it --name blackjack-core --mount type=bind,source="$(pwd)",target=/core blackjack/core /bin/bash
+# docker run -p 80:8000 -it --name blackjack-core --mount type=bind,source="$(pwd)",target=/core blackjack-core /bin/bash
 
 # run a container with bash for python api development 
 # (overwrite the api with the local repo):
-# docker run -p 80:8000 -it --name blackjack-core --mount type=bind,source="$(pwd)/api",target=/core/api blackjack/core /bin/bash
+# docker run -p 80:8000 -it --name blackjack-core --mount type=bind,source="$(pwd)/api",target=/core/api blackjack-core /bin/bash
 
 FROM python:3.10-bullseye
 COPY . /core/
@@ -27,3 +27,4 @@ RUN DEBIAN_FRONTEND='noninteractive' \
     && cd /core/api && scripts/get_cpp_module.sh \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
+CMD "./api/scripts/start_api_dev.sh"

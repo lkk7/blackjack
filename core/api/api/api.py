@@ -1,37 +1,26 @@
-from typing import Optional
-import cpp_module.cppcore as cpp
+from random import randrange
 from fastapi import FastAPI, Path
 from pydantic import BaseModel, Field
-
+from .redis import RedisWrapper
+import cpp_module.cppcore as cpp
 
 app = FastAPI()
+redis = RedisWrapper()
+
+app.on_event("startup")(redis.create_redis)
+app.on_event("shutdown")(redis.close_redis)
 
 
 @app.get("/")
 async def root():
     return {
-        "message": "Success! Blackjack value: {}".format(cpp.BLACKJACK_VALUE)
+        "message": "Success! Blackjack value: {}".format(cpp.BLACKJACK_VALUE),
+        "redisWorks": await redis.conn.ping(),
     }
 
 
-@app.get("/ab/{x}")
-async def get_something(
-    x: float = Path(..., title="X", description="This is an x.", ge=1.5)
-):
-    return {"x": x}
-
-
-class Item(BaseModel):
-    name: str = Field(..., example="Example Name")
-    description: Optional[str] = None
-    price: Optional[int] = Field(None, example="X")
-
-    class Config:
-        schema_extra = {"example": {"description": "A good description"}}
-
-
-@app.get("/post")
-async def get_x(
-    x: Optional[Item] = Item(name="xd", description="A description!")
-):
-    return {"x": x}
+@app.get("/testredis")
+async def test_redis():
+    await redis.conn.set("random-value", "randomValue" + str(randrange(100)))
+    test_value = await redis.conn.get("random-value")
+    return {"random-value": test_value}
