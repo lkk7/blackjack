@@ -12,4 +12,5 @@ app.on_event("shutdown")(redis.wrapper.close_redis)
 
 @app.get("/", response_model=bool)
 async def root():
+    """Ping the API."""
     return True

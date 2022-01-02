@@ -1,9 +1,10 @@
 import aioredis
+from aioredis import Redis
 
 
 class RedisWrapper:
     def __init__(self):
-        self.conn: aioredis.Redis = None
+        self.conn: Redis = None
 
     async def create_redis(self):
         self.conn = aioredis.from_url(
