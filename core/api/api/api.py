@@ -4,7 +4,7 @@ from .routers import game
 
 
 app = FastAPI()
-app.include_router(game.router)
+app.include_router(game.router, prefix='/game')
 
 app.on_event("startup")(redis.wrapper.create_redis)
 app.on_event("shutdown")(redis.wrapper.close_redis)
