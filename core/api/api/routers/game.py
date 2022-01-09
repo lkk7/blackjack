@@ -21,6 +21,7 @@ router = APIRouter()
 
 @router.post("/new", response_model=GameState)
 async def create_new_game(redis: Redis = Depends(redis.wrapper.get)):
+    """Create a new game with an unique ID."""
     game = get_new_game()
     handle_score(game)
     game_dict = game_to_dict(game)
@@ -33,6 +34,7 @@ async def create_new_game(redis: Redis = Depends(redis.wrapper.get)):
 async def get_game(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
+    """Get a game's state."""
     game_str: str | None = await redis.get(game_id)
     if not game_str:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -43,6 +45,7 @@ async def get_game(
 async def restart_game(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
+    """Restart a game without changing its ID."""
     game = await get_game_by_id(redis, game_id)
     game = get_restarted_game(game)
     handle_score(game)
@@ -55,6 +58,7 @@ async def restart_game(
 async def player_hit(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
+    """Make a 'hit' move as a player (if it's possible)."""
     game = await get_game_by_id(redis, game_id)
     if game.game_state != cpp.GameState.player_to_hit:
         raise HTTPException(
@@ -72,6 +76,7 @@ async def player_hit(
 async def player_stand(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
+    """Make a 'stand' move as a player (if it's possible)."""
     game = await get_game_by_id(redis, game_id)
     if game.game_state != cpp.GameState.player_to_hit:
         raise HTTPException(

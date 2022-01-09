@@ -4,8 +4,9 @@ from .routers import game
 
 
 app = FastAPI()
-app.include_router(game.router, prefix='/game')
+app.include_router(game.router, prefix="/game")
 
+# Start/close Redis connection on app startup/shutdown.
 app.on_event("startup")(redis.wrapper.create_redis)
 app.on_event("shutdown")(redis.wrapper.close_redis)
 

@@ -8,6 +8,7 @@ STATES_LOSING_ON_RESTART = (
 
 
 def get_new_game(bet_money: int = 1000) -> cpp.Game:
+    """Return a clean new game with cards dealt."""
     game = cpp.Game(
         cpp.Table(cpp.Hand(), cpp.Hand(), cpp.StandardDeck(True), bet_money)
     )
@@ -16,6 +17,7 @@ def get_new_game(bet_money: int = 1000) -> cpp.Game:
 
 
 def get_restarted_game(game: cpp.Game, bet_money: int = 1000) -> cpp.Game:
+    """Restart an existing game, handling the score if it's a surrender."""
     last_score = game.total_bet_score
     if game.game_state in STATES_LOSING_ON_RESTART:
         last_score -= game.table.bet_money
@@ -25,6 +27,7 @@ def get_restarted_game(game: cpp.Game, bet_money: int = 1000) -> cpp.Game:
 
 
 def play_out(game: cpp.Game):
+    """Play out the dealer's part of the game and set the final score."""
     game.game_state = cpp.GameState.dealer_to_hit
     while game.should_dealer_hit():
         game.dealer_hit()
@@ -34,6 +37,7 @@ def play_out(game: cpp.Game):
 
 
 def handle_score(game: cpp.Game):
+    """Handle the game's score (add/subtract/nothing) based on its state."""
     if game.game_state == cpp.GameState.dealer_win:
         game.total_bet_score -= game.table.bet_money
     elif game.game_state == cpp.GameState.player_win:

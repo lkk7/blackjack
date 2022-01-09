@@ -23,7 +23,7 @@ class GameDict(TypedDict):
 
 
 def game_to_dict(game: cpp.Game) -> GameDict:
-    """Convert game into a dictionary (easily convertible to JSON)."""
+    """Convert a game object into a dictionary (easily convertible to JSON)."""
     result = {
         "total": game.total_bet_score,
         "bet": game.table.bet_money,

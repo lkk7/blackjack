@@ -6,6 +6,7 @@ import cpp_module.cppcore as cpp
 
 
 async def get_game_by_id(redis: Redis, game_id: str) -> cpp.Game:
+    """Get a game by its ID, using a given Redis connection."""
     game_str: str | None = await redis.get(game_id)
     if not game_str:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
