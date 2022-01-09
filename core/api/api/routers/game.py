@@ -3,8 +3,13 @@ from secrets import token_urlsafe
 from fastapi import APIRouter, Path, HTTPException, status
 from fastapi.param_functions import Depends
 from api.schemas import GameState
-from api.blackjack.conversions import game_to_dict, dict_to_game
-from api.blackjack.logic import get_new_game, get_restarted_game, play_out
+from api.blackjack.conversions import game_to_dict
+from api.blackjack.logic import (
+    get_new_game,
+    get_restarted_game,
+    play_out,
+    handle_score,
+)
 from api.blackjack.utils import get_game_by_id
 from api.redis import Redis
 import api.redis as redis
@@ -17,6 +22,7 @@ router = APIRouter()
 @router.post("/new", response_model=GameState)
 async def create_new_game(redis: Redis = Depends(redis.wrapper.get)):
     game = get_new_game()
+    handle_score(game)
     game_dict = game_to_dict(game)
     game_id = token_urlsafe(32)
     await redis.set(game_id, json.dumps(game_dict))
@@ -39,6 +45,7 @@ async def restart_game(
 ):
     game = await get_game_by_id(redis, game_id)
     game = get_restarted_game(game)
+    handle_score(game)
     game_dict = game_to_dict(game)
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
@@ -55,6 +62,7 @@ async def player_hit(
             detail="It's not your turn to hit",
         )
     game.player_hit()
+    handle_score(game)
     game_dict = game_to_dict(game)
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
@@ -71,6 +79,7 @@ async def player_stand(
             detail="It's not your turn to stand",
         )
     play_out(game)
+    handle_score(game)
     game_dict = game_to_dict(game)
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
