@@ -1,5 +1,7 @@
 core/api/cpp_module
 **/build
 **/__pycache__
-.DS_Store
+**/.DS_Store
 .vscode
+frontend/node_modules
+frontend/build
