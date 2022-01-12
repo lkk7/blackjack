@@ -1,6 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/app/App";
+import StartScreen from "./pages/start-screen/StartScreen";
+
+const App = () => (
+  <div className="App">
+    <StartScreen />
+  </div>
+);
 
 ReactDOM.render(
   <React.StrictMode>
