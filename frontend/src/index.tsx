@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import StartScreen from "./pages/start-screen/StartScreen";
+import theme from "./theme";
 
 const App = () => (
   <div className="App">
@@ -10,7 +12,10 @@ const App = () => (
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
