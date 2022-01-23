@@ -18,7 +18,7 @@ class GameState(BaseModel):
     Additionally it has a gameId for game identification in Redis.
     """
 
-    gameId: bytes
+    gameId: str
     total: int
     bet: int
     state: int

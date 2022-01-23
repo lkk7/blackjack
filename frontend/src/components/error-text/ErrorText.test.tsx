@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import Logo from "./Logo";
+import ErrorText from "./ErrorText";
 
-test("Renders the logo", () => {
-  render(<Logo size={4}/>);
+test("Renders the error", () => {
+  render(<ErrorText message="Error message!" />);
   const text = screen.getByText("Blackjack");
   const symbols = screen.getByText("♣️♦️♥️♠️");
   expect(text).toBeInTheDocument();
