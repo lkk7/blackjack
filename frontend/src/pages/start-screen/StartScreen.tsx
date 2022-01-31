@@ -1,37 +1,13 @@
+import { useRef } from "react";
 import { LoadingButton } from "@mui/lab";
 import { Stack, TextField } from "@mui/material";
-import { AxiosError, AxiosResponse } from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../axiosConfig";
-import ErrorText, {
-  placeholderError,
-} from "../../components/error-text/ErrorText";
+import TextToBeShown from "../../components/text-to-be-shown/TextToBeShown";
 import Logo from "../../components/logo/Logo";
-import { useAppDispatch } from "../../store/hooks";
-import { GameState, setWholeGame } from "../../store/slices/gameSlice";
+import { useJoinGame } from "./StartScreen.hooks";
 
 const StartScreen = () => {
-  const [isNewGameLoading, setIsNewGameLoading] = useState(false);
-  const [newGameError, setNewGameError] = useState(placeholderError);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const joinNewGame: React.MouseEventHandler<HTMLButtonElement> = () => {
-    setIsNewGameLoading(true);
-    axiosInstance
-      .post("/new")
-      .then((response: AxiosResponse<GameState>) => {
-        setIsNewGameLoading(false);
-        setNewGameError("");
-        dispatch(setWholeGame(response.data));
-        navigate("/game");
-      })
-      .catch((e: AxiosError) => {
-        setIsNewGameLoading(false);
-        setNewGameError(`Couldn't connect to the server. (${e.message})`);
-      });
-  };
+  const [isGameLoading, gameLoadingError, joinGame] = useJoinGame();
+  const gameIdRef = useRef<any>(); // "any" – neccessary for compliance with MUI API.
 
   return (
     <Stack
@@ -39,21 +15,37 @@ const StartScreen = () => {
       alignItems="center"
       justifyContent="center"
       spacing={8}
+      component="main"
     >
       <Logo size={4} />
       <Stack alignItems="center">
         <LoadingButton
           variant="contained"
-          loading={isNewGameLoading}
-          onClick={joinNewGame}
+          loading={isGameLoading}
+          onClick={() => joinGame("new")}
         >
           New game
         </LoadingButton>
-        <ErrorText message={newGameError}></ErrorText>
+        <TextToBeShown
+          component="span"
+          message={gameLoadingError}
+          color="error"
+        ></TextToBeShown>
       </Stack>
       <Stack alignItems="center" spacing={1} width={"100%"}>
-        <TextField id="game-id" label="Game ID" size="small" />
-        <LoadingButton>Continue a game</LoadingButton>
+        <TextField
+          id="game-id"
+          label="Game ID"
+          size="small"
+          inputRef={gameIdRef}
+          inputProps={{ maxLength: 100 }}
+        />
+        <LoadingButton
+          loading={isGameLoading}
+          onClick={() => joinGame(gameIdRef.current.value)}
+        >
+          Continue a game
+        </LoadingButton>
       </Stack>
     </Stack>
   );

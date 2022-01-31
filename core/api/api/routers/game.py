@@ -54,7 +54,7 @@ async def restart_game(
     return GameState(gameId=game_id, **game_dict)
 
 
-@router.post("/{game_id}/player-hit", response_model=GameState)
+@router.post("/{game_id}/hit", response_model=GameState)
 async def player_hit(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
@@ -72,7 +72,7 @@ async def player_hit(
     return GameState(gameId=game_id, **game_dict)
 
 
-@router.post("/{game_id}/player-stand", response_model=GameState)
+@router.post("/{game_id}/stand", response_model=GameState)
 async def player_stand(
     game_id: str = Path(...), redis: Redis = Depends(redis.wrapper.get)
 ):
