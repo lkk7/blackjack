@@ -9,6 +9,7 @@ from api.blackjack.logic import (
     get_restarted_game,
     play_out,
     handle_score,
+    handle_hidden_cards
 )
 from api.blackjack.utils import get_game_by_id
 from api.redis import Redis
@@ -24,7 +25,7 @@ async def create_new_game(redis: Redis = Depends(redis.wrapper.get)):
     """Create a new game with an unique ID."""
     game = get_new_game()
     handle_score(game)
-    game_dict = game_to_dict(game)
+    game_dict = handle_hidden_cards(game_to_dict(game))
     game_id = token_urlsafe(32)
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
@@ -49,7 +50,7 @@ async def restart_game(
     game = await get_game_by_id(redis, game_id)
     game = get_restarted_game(game)
     handle_score(game)
-    game_dict = game_to_dict(game)
+    game_dict = handle_hidden_cards(game_to_dict(game))
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
 
@@ -67,7 +68,7 @@ async def player_hit(
         )
     game.player_hit()
     handle_score(game)
-    game_dict = game_to_dict(game)
+    game_dict = handle_hidden_cards(game_to_dict(game))
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
 
@@ -85,6 +86,6 @@ async def player_stand(
         )
     play_out(game)
     handle_score(game)
-    game_dict = game_to_dict(game)
+    game_dict = handle_hidden_cards(game_to_dict(game))
     await redis.set(game_id, json.dumps(game_dict))
     return GameState(gameId=game_id, **game_dict)
