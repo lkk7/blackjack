@@ -16,6 +16,7 @@ class Card(BaseModel):
 class GameState(BaseModel):
     """A game state containing everything needed to recreate a cpp game object.
     Additionally it has a gameId for game identification in Redis.
+    (Note: we omit the deck because it isn't meant to be sent to the client)
     """
 
     gameId: str
@@ -24,4 +25,3 @@ class GameState(BaseModel):
     state: int
     playerHand: List[Card]
     dealerHand: List[Card]
-    deck: List[Card]

@@ -11,20 +11,16 @@ export interface GameCard {
 export interface GameState {
   gameId?: string;
   total: number;
-  bet: number;
   state: GameResult;
   playerHand: GameCard[];
   dealerHand: GameCard[];
-  deck: GameCard[];
 }
 
-const initialState: GameState = {
+export const initialState: GameState = {
   total: 0,
-  bet: 0,
   state: GameResult.YET_TO_DEAL,
   playerHand: [],
   dealerHand: [],
-  deck: [],
 };
 
 export const gameSlice = createSlice({

@@ -8,7 +8,7 @@ import {
 } from "../../store/slices/gameSlice";
 import { LoadingButton } from "@mui/lab";
 import TextToBeShown from "../text-to-be-shown/TextToBeShown";
-import { useEffectGameResult, useGameActions } from "./Game.hooks";
+import { useEffectGameResult, useGameActions } from "./game-hooks";
 
 const Game = () => {
   const dealerCards = useAppSelector(selectDealerCards);
@@ -69,6 +69,7 @@ const Game = () => {
       <Snackbar
         anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
         open={isTurnMsgOpen}
+        role='alert'
         message="You can't make this move now!"
       />
     </Stack>

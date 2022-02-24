@@ -3,7 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import { Stack, TextField } from "@mui/material";
 import TextToBeShown from "../../components/text-to-be-shown/TextToBeShown";
 import Logo from "../../components/logo/Logo";
-import { useJoinGame } from "./StartScreen.hooks";
+import { useJoinGame } from "./start-screen-hooks";
 
 const StartScreen = () => {
   const [isGameLoading, gameLoadingError, joinGame] = useJoinGame();

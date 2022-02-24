@@ -47,7 +47,7 @@ export const useGameActions = (): [
       });
   };
   return [isTurnMsgOpen, moveInGame, restartGame];
-};
+}
 
 export const useEffectGameResult = (): [
   {
