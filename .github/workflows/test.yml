@@ -9,13 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
       - run: docker-compose build core
-      - run: cd frontend
+      - run: docker run --rm blackjack-core bash -c "cd cpp && scripts/build_and_test_all.sh"
       - run: npm ci
+        working-directory: ./frontend
       - run: npm run test-coverage
+        working-directory: ./frontend
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-        files: ./coverage/clover.xml
+        with:
+          files: ./frontend/coverage/clover.xml
