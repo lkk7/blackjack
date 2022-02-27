@@ -14,21 +14,21 @@ An experimental project that explores C++ --> Python bindings (made using [pybin
 
 ![Project diagram](diagram.png)
 
-
+Note: such C++ --> Python bindings aren't a good idea for a simple blackjack game server. We don't have problems with the game's performance itself, so we're only introducing more complexity. However, it was just an interesting thing for me to develop while learning about the bindings.
 
 - Front-end test coverage: [![codecov](https://codecov.io/gh/lkk7/blackjack/branch/main/graph/badge.svg?token=LMGF0XTSEX)](https://codecov.io/gh/lkk7/blackjack)
 - C++ core test coverage: Probably ~99%
 - API test coverage: not tested (yet?) :(
 
 ## How to start (docker + docker-compose needed)
+You have to `git clone` this repository with a `--recursive` flag because it contains the [pybind11](https://github.com/pybind/pybind11) submodule in `core/cpp/extern/pybind11`.
 ```bash
 docker-compose build
 docker-compose up -d
 cd frontend && npm install
 npm start
 ```
-Then see [http://localhost:3000/](http://localhost:3000/)
-
+Then, check [http://localhost:3000/](http://localhost:3000/).
 
 ## Some screenshots
 

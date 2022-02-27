@@ -12,10 +12,11 @@ services:
       - redis
     networks:
       - blackjack
-    volumes:
-      - type: bind
-        source: ./core
-        target: /core
+    # Do this to use your files from the core folder, with changes detected in real-time.
+    # volumes:
+    #   - type: bind
+    #     source: ./core
+    #     target: /core
   redis:
     image: redis:alpine
     networks:
